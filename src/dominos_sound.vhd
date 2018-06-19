@@ -22,12 +22,12 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity audio is 
 port(		
-			Clk_50			: in	std_logic;
-			Clk_6				: in  std_logic;
-			Reset_n			: in	std_logic;
+			Clk_50			: in  std_logic;
+			Clk_6			: in  std_logic;
+			Reset_n			: in  std_logic;
 			Attract			: in  std_logic;
 			Tumble			: in  std_logic;
-			Display			: in	std_logic_vector(7 downto 0);
+			Display			: in  std_logic_vector(7 downto 0);
 			HCount			: in  std_logic_vector(8 downto 0);
 			VCount			: in  std_logic_vector(7 downto 0);
 			Audio_pwm		: out std_logic
@@ -38,30 +38,30 @@ architecture rtl of audio is
 
 signal reset				: std_logic;
 
-signal H4					: std_logic;
-signal H8 					: std_logic;	
-signal H16 					: std_logic;	
-signal H32 					: std_logic;	
-signal H64 					: std_logic;	
+signal H4				: std_logic;
+signal H8 				: std_logic;	
+signal H16 				: std_logic;	
+signal H32 				: std_logic;	
+signal H64 				: std_logic;	
 signal H256 				: std_logic;	
-signal V2					: std_logic;
-signal V4					: std_logic;
+signal V2				: std_logic;
+signal V4			       : std_logic;
 
 signal Amp_n				: std_logic;
 signal Freq_n				: std_logic;
 signal Tone_freq			: std_logic_vector(3 downto 0);
-signal Tone					: std_logic_vector(3 downto 0);
+signal Tone			        : std_logic_vector(3 downto 0);
 signal Pulse				: std_logic;
 signal Topple				: std_logic;
 
 signal ena_count			: std_logic_vector(10 downto 0);
 signal ena_3k				: std_logic;
 
-signal tone_prefilter   : std_logic_vector(3 downto 0);
-signal tone_filter_t1   : std_logic_vector(3 downto 0);
-signal tone_filter_t2   : std_logic_vector(3 downto 0);
-signal tone_filter_t3   : std_logic_vector(3 downto 0);
-signal tone_filtered    : std_logic_vector(5 downto 0);
+signal tone_prefilter                   : std_logic_vector(3 downto 0);
+signal tone_filter_t1                   : std_logic_vector(3 downto 0);
+signal tone_filter_t2                   : std_logic_vector(3 downto 0);
+signal tone_filter_t3                   : std_logic_vector(3 downto 0);
+signal tone_filtered                    : std_logic_vector(5 downto 0);
 
 signal Audio				: std_logic_vector(6 downto 0);
 
@@ -131,8 +131,8 @@ begin
 			tone_filter_t3 <= tone_filter_t2;
 		end if;
 		tone_filtered <=  ("00" & tone_filter_t1) +
-								('0'  & tone_filter_t2 & '0') +
-								("00" & tone_filter_t3);
+			('0'  & tone_filter_t2 & '0') +
+		        ("00" & tone_filter_t3);
 	end if;
 end process;	
 
