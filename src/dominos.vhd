@@ -14,7 +14,7 @@
 -- for more details.
 
 -- Targeted to EP2C5T144C8 mini board but porting to nearly any FPGA should be fairly simple
--- See dominos 2 manual for video output details. Resistor values listed here have been scaled 
+-- See Dominos manual pg. 40 for video output details. Resistor values listed here have been scaled 
 -- for 3.3V logic. 
 -- R48 1k Ohm
 -- R49 1k Ohm
@@ -29,27 +29,27 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity dominos is 
 port(		
-			Clk_50_I		: in	std_logic;	-- 50MHz input clock
-			Reset_I		: in	std_logic;	-- Reset button (Active low)
+			Clk_50_I		: in  std_logic;	-- 50MHz input clock
+			Reset_I		        : in  std_logic;	-- Reset button (Active low)
 			VideoW_O		: out std_logic;  -- White video output (680 Ohm)
 			VideoB_O		: out std_logic;	-- Black video output (1.2k)
-			Sync_O		: out std_logic;  -- Composite sync output (1.2k)
-			Audio_O		: out std_logic;  -- Ideally this should have a simple low pass filter
-			Coin1_I		: in  std_logic;  -- Coin switches (Active low)
-			Coin2_I		: in  std_logic;
+			Sync_O		        : out std_logic;  -- Composite sync output (1.2k)
+			Audio_O		        : out std_logic;  -- Ideally this should have a simple low pass filter
+			Coin1_I		        : in  std_logic;  -- Coin switches (Active low)
+			Coin2_I		        : in  std_logic;
 			Start1_I		: in  std_logic;  -- Start buttons
 			Start2_I		: in  std_logic;
 			Up1			: in  std_logic;  -- Player controls
 			Down1			: in  std_logic;
 			Left1			: in  std_logic;
-			Right1    	: in 	std_logic;
-			Up2			: in	std_logic;
-			Down2			: in	std_logic;
-			Left2			: in 	std_logic;
-			Right2		: in	std_logic;
-			Test_I		: in  std_logic;
-			Lamp1_O		: out std_logic;	-- Player 1 and 2 start button LEDs
-			Lamp2_O		: out std_logic
+			Right1    	        : in  std_logic;
+			Up2			: in  std_logic;
+			Down2			: in  std_logic;
+			Left2			: in  std_logic;
+			Right2		        : in  std_logic;
+			Test_I		        : in  std_logic;
+			Lamp1_O		        : out std_logic;	-- Player 1 and 2 start button LEDs
+			Lamp2_O		        : out std_logic
 			);
 end dominos;
 
@@ -58,45 +58,45 @@ architecture rtl of dominos is
 signal clk_12			: std_logic;
 signal clk_6			: std_logic;
 signal phi1 			: std_logic;
-signal phi2				: std_logic;
+signal phi2			: std_logic;
 signal reset_n			: std_logic;
 
-signal Hcount		   : std_logic_vector(8 downto 0) := (others => '0');
-signal H256				: std_logic;
+signal Hcount		        : std_logic_vector(8 downto 0) := (others => '0');
+signal H256			: std_logic;
 signal H256_s			: std_logic;
 signal H256_n			: std_logic;
-signal H128				: std_logic;
-signal H64				: std_logic;
-signal H32				: std_logic;
-signal H16				: std_logic;
-signal H8				: std_logic;
-signal H8_n				: std_logic;
-signal H4				: std_logic;
-signal H4_n				: std_logic;
-signal H2				: std_logic;
-signal H1				: std_logic;
+signal H128			: std_logic;
+signal H64			: std_logic;
+signal H32			: std_logic;
+signal H16			: std_logic;
+signal H8			: std_logic;
+signal H8_n			: std_logic;
+signal H4			: std_logic;
+signal H4_n			: std_logic;
+signal H2			: std_logic;
+signal H1			: std_logic;
 
 signal Hsync			: std_logic;
 signal Vsync			: std_logic;
 
-signal Vcount  		: std_logic_vector(7 downto 0) := (others => '0');
-signal V128				: std_logic;
-signal V64				: std_logic;
-signal V32				: std_logic;
-signal V16				: std_logic;
-signal V8				: std_logic;
-signal V4				: std_logic;
-signal V2				: std_logic;
-signal V1				: std_logic;
+signal Vcount  		        : std_logic_vector(7 downto 0) := (others => '0');
+signal V128			: std_logic;
+signal V64			: std_logic;
+signal V32			: std_logic;
+signal V16			: std_logic;
+signal V8			: std_logic;
+signal V4			: std_logic;
+signal V2			: std_logic;
+signal V1			: std_logic;
 
 signal Vblank			: std_logic;
 signal Vreset			: std_logic;
-signal Vblank_s		: std_logic;
+signal Vblank_s		        : std_logic;
 signal Vblank_n_s		: std_logic;
 signal HBlank			: std_logic;
 
-signal CompBlank_s	: std_logic;
-signal CompSync_n_s	: std_logic;
+signal CompBlank_s	        : std_logic;
+signal CompSync_n_s	        : std_logic;
 
 signal WhitePF_n		: std_logic;
 signal BlackPF_n		: std_logic;
@@ -106,18 +106,18 @@ signal Display			: std_logic_vector(7 downto 0);
 
 -- Address decoder
 signal addec_bus		: std_logic_vector(7 downto 0);
-signal RnW				: std_logic;
+signal RnW			: std_logic;
 signal Write_n			: std_logic;
-signal ROM1				: std_logic;
-signal ROM2				: std_logic;
-signal ROM3				: std_logic;
-signal WRAM				: std_logic;
+signal ROM1			: std_logic;
+signal ROM2			: std_logic;
+signal ROM3			: std_logic;
+signal WRAM			: std_logic;
 signal RAM_n			: std_logic;
 signal Sync_n			: std_logic;
-signal Switch_n		: std_logic;
+signal Switch_n		        : std_logic;
 
 signal Display_n		: std_logic;
-signal TimerReset_n	: std_logic;
+signal TimerReset_n	        : std_logic;
 
 signal Attract			: std_logic := '0';	
 signal Tumble 			: std_logic := '0';
@@ -125,25 +125,19 @@ signal Tumble 			: std_logic := '0';
 signal Lamp1			: std_logic;
 signal Lamp2			: std_logic;
 
-
 signal NMI_n			: std_logic;
-
-signal Adr				: std_logic_vector(9 downto 0);
-
-signal SW1				: std_logic_vector(3 downto 0);
-
+signal Adr			: std_logic_vector(9 downto 0);
+signal SW1			: std_logic_vector(3 downto 0);
 signal Inputs			: std_logic_vector(1 downto 0);
-
-
 
 begin
 -- Configuration DIP switches, these can be brought out to external switches if desired
 -- See dominos 2 manual page 11 for complete information. Active low (0 = On, 1 = Off)
 --    1 	2							Points to win		(00 - 3, 01 - 4, 10 - 5, 11 - 6)
---   			3	4					Game Cost			(10 - 1 Coin per player) 
---						5	6	7	8	Unused				
+--   			3	4					Game Cost		(10 - 1 Coin per player) 
+--					5	6	7	8	Unused				
 
-SW1 <= "1010"; -- Config dip switches
+SW1 <= "1010"; -- Config dip switches 1-4
 
 -- PLL to generate 12.096 MHz clock
 PLL: entity work.clk_pll
