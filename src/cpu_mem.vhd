@@ -21,89 +21,89 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity CPU_mem is 
 port(		
-			CLK12					: in  	std_logic;
-			CLK6					: in  	std_logic; -- 6MHz on schematic
-			Reset_I				: in  	std_logic;
-			Reset_n				: buffer	std_logic;
-			VCount				: in 		std_logic_vector(7 downto 0);
-			HCount				: in  	std_logic_vector(8 downto 0);
-			Vblank_s				: in  	std_logic; -- Vblank* on schematic
-			Vreset				: in 		std_logic;
-			Hsync_n				: in  	std_logic;
-			Test_n				: in  	std_logic;
+			CLK12				: in  	 std_logic;
+			CLK6				: in  	 std_logic; -- 6MHz on schematic
+			Reset_I				: in  	 std_logic;
+			Reset_n				: buffer std_logic;
+			VCount				: in 	 std_logic_vector(7 downto 0);
+			HCount				: in  	 std_logic_vector(8 downto 0);
+			Vblank_s			: in  	 std_logic; -- Vblank* on schematic
+			Vreset				: in 	 std_logic;
+			Hsync_n				: in  	 std_logic;
+			Test_n				: in  	 std_logic;
 			Attract				: buffer std_logic;
-			Tumble 				: out		std_logic;
-			Lamp1					: out 	std_logic;
-			Lamp2					: out 	std_logic;
-			PHI1_O				: out 	std_logic;
-			PHI2_O				: out 	std_logic;
-			DISPLAY				: out		std_logic_vector(7 downto 0);
-			IO_Adr				: out 	std_logic_vector(9 downto 0);
-			Inputs				: in  	std_logic_vector(1 downto 0)
+			Tumble 				: out	 std_logic;
+			Lamp1				: out 	 std_logic;
+			Lamp2				: out 	 std_logic;
+			PHI1_O				: out 	 std_logic;
+			PHI2_O				: out 	 std_logic;
+			DISPLAY				: out	 std_logic_vector(7 downto 0);
+			IO_Adr				: out 	 std_logic_vector(9 downto 0);
+			Inputs				: in  	 std_logic_vector(1 downto 0)
 			);
 end CPU_mem;
 
 architecture rtl of CPU_mem is
 
 signal cpu_clk			: std_logic;
-signal PHI1				: std_logic;
-signal PHI2				: std_logic;
-signal Q5				: std_logic;
-signal Q6				: std_logic;
-signal A7_2				: std_logic;
-signal A7_5				: std_logic;
-signal A7_7				: std_logic;
+signal PHI1			: std_logic;
+signal PHI2			: std_logic;
+signal Q5			: std_logic;
+signal Q6			: std_logic;
+signal A7_2			: std_logic;
+signal A7_5			: std_logic;
+signal A7_7			: std_logic;
 
-signal A8_6				: std_logic;
+signal A8_6			: std_logic;
 
-signal H256				: std_logic;
+signal H256			: std_logic;
 signal H256_n			: std_logic;
-signal H128				: std_logic;
-signal H64				: std_logic;
-signal H32				: std_logic;
-signal H16				: std_logic;
-signal H8				: std_logic;
-signal H4				: std_logic;
+signal H128			: std_logic;
+signal H64			: std_logic;
+signal H32			: std_logic;
+signal H16			: std_logic;
+signal H8			: std_logic;
+signal H4			: std_logic;
 
-signal V128				: std_logic;
-signal V64				: std_logic;
-signal V32				: std_logic;
-signal V16				: std_logic;
-signal V8				: std_logic;
+signal V128			: std_logic;
+signal V64			: std_logic;
+signal V32			: std_logic;
+signal V16			: std_logic;
+signal V8			: std_logic;
 
 signal IRQ_n			: std_logic;
 signal NMI_n			: std_logic;
-signal RW_n				: std_logic;
-signal RnW 				: std_logic;
-signal A					: std_logic_vector(15 downto 0);
-signal ADR				: std_logic_vector(9 downto 0);
+signal RW_n			: std_logic;
+signal RnW 			: std_logic;
+signal A			: std_logic_vector(15 downto 0);
+signal ADR			: std_logic_vector(9 downto 0);
 signal cpuDin			: std_logic_vector(7 downto 0);
 signal cpuDout			: std_logic_vector(7 downto 0);
 signal DBUS_n			: std_logic_vector(7 downto 0);
-signal DBUS				: std_logic_vector(7 downto 0);
+signal DBUS			: std_logic_vector(7 downto 0);
 
 signal ROM3_dout		: std_logic_vector(7 downto 0);
 signal ROM4_dout		: std_logic_vector(7 downto 0);
-signal ROM_dout		: std_logic_vector(7 downto 0);
+signal ROM_dout		        : std_logic_vector(7 downto 0);
 
 signal ROM1 			: std_logic;
-signal ROM2				: std_logic;
-signal ROM3				: std_logic;
-signal ROM4				: std_logic;
+signal ROM2			: std_logic;
+signal ROM3			: std_logic;
+signal ROM4			: std_logic;
 signal ROM_ce			: std_logic;
 signal ROM_mux_in		: std_logic_vector(3 downto 0);
 
-signal cpuRAM_dout	: std_logic_vector(7 downto 0);
+signal cpuRAM_dout	        : std_logic_vector(7 downto 0);
 signal Vram_dout		: std_logic_vector(7 downto 0);
-signal RAM_addr		: std_logic_vector(9 downto 0) := (others => '0');
+signal RAM_addr		        : std_logic_vector(9 downto 0) := (others => '0');
 signal Vram_addr		: std_logic_vector(9 downto 0) := (others => '0');
 signal Scanbus			: std_logic_vector(9 downto 0) := (others => '0');
-signal RAM_dout		: std_logic_vector(7 downto 0);
+signal RAM_dout		        : std_logic_vector(7 downto 0);
 signal RAM_we			: std_logic := '0';
 signal RAM_RW_n 		: std_logic := '1';
-signal RAM_ce_n		: std_logic := '1';
+signal RAM_ce_n		        : std_logic := '1';
 signal RAM_n			: std_logic := '1'; 
-signal WRAM				: std_logic := '0';
+signal WRAM			: std_logic := '0';
 signal WRITE_n			: std_logic := '1';
 
 signal F2_in			: std_logic_vector(3 downto 0) := "0000";
@@ -112,29 +112,29 @@ signal D2_in			: std_logic_vector(3 downto 0) := "0000";
 signal D2_out			: std_logic_vector(9 downto 0) := "1111111111";
 signal E8_in			: std_logic_vector(3 downto 0) := "0000";
 signal E8_out			: std_logic_vector(9 downto 0) := "1111111111";
-signal P3_8				: std_logic := '0';
+signal P3_8		        : std_logic := '0';
 
-signal Sync			   : std_logic := '0';
+signal Sync			: std_logic := '0';
 signal Sync_n			: std_logic := '1';
-signal Switch_n		: std_logic := '1';
+signal Switch_n		        : std_logic := '1';
 signal Display_n		: std_logic := '1';
 signal Addec_bus		: std_logic_vector(7 downto 0);
 
-signal Timer_Reset_n	: std_logic := '1';
+signal Timer_Reset_n	        : std_logic := '1';
 
-signal J6_5				: std_logic := '0';
-signal J6_9				: std_logic := '0';
+signal J6_5			: std_logic := '0';
+signal J6_9			: std_logic := '0';
 
 signal Coin1			: std_logic := '0';
 signal Coin2			: std_logic := '0';
 signal Input_mux 		: std_logic := '0';
-signal A8_8				: std_logic := '0';
+signal A8_8			: std_logic := '0';
 signal H9_Q_n			: std_logic := '1';
 signal J9_out			: std_logic_vector(7 downto 0);
 signal H8_en			: std_logic := '0';
 
-signal WDog_Clear			: std_logic := '0';
-signal WDog_count			: std_logic_vector(3 downto 0) := "0000";
+signal WDog_Clear		: std_logic := '0';
+signal WDog_count		: std_logic_vector(3 downto 0) := "0000";
 
 begin
 
@@ -189,7 +189,6 @@ ADR(9 downto 7) <= (A(9) or WRAM) & (A(8) or WRAM) & (A(7) or WRAM);
 ADR(6 downto 0) <= A(6 downto 0);
 RnW <= (not RW_n);
 IO_Adr <= Adr;
-
 NMI_n <= not (Vblank_s and Test_n);
 
 		
@@ -249,8 +248,8 @@ begin
 end process;
 
 -- RAM 
--- The original hardware multiplexes access to the RAM between the CPU and video hardware. In the FPGA it's
--- easier to use dual-ported RAM
+-- The original hardware multiplexes access to the RAM between the CPU and video hardware. Here we are 
+-- just using dual-ported RAM
 RAM: entity work.ram1k_dp
 port map(
 	clock => clk6,
