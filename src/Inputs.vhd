@@ -19,28 +19,28 @@ use IEEE.STD_LOGIC_ARITH.all;
 
 entity control_inputs is 
 port(		
-			SW1				: in  std_logic_vector(7 downto 0); -- DIP switches
+			SW1	                : in  std_logic_vector(7 downto 0); -- DIP switches
 			Coin1_n			: in  std_logic; -- Coin switches
 			Coin2_n			: in 	std_logic;
 			Start1			: in	std_logic; -- 1 and 2 player start switches
 			Start2			: in	std_logic;
-			Left1				: in  std_logic; -- Gas pedals, these are simple on/off switches
-			Up1				: in  std_logic;
+			Left1			: in  std_logic; -- Gas pedals, these are simple on/off switches
+			Up1			: in  std_logic;
 			Right1			: in  std_logic; -- Player 1 and 2 gear select levers
-			Down1				: in  std_logic;
-			Left2				: in  std_logic;
+			Down1			: in  std_logic;
+			Left2			: in  std_logic;
 			Right2			: in  std_logic;
-			Up2				: in  std_logic;
-			Down2				: in  std_logic;
+			Up2			: in  std_logic;
+			Down2			: in  std_logic;
 			Self_Test		: in	std_logic; -- Self test switch
-			Adr				: in  std_logic_vector(9 downto 0); -- Adress bus, only the lower 9 bits used by IO circuitry
+			Adr			: in  std_logic_vector(9 downto 0); -- Adress bus, only the lower 9 bits used by IO circuitry
 			Inputs			: out std_logic_vector(1 downto 0)  -- Out to data bus, only upper two bits used
 			);
 end control_inputs;
 
 architecture rtl of control_inputs is
 
-signal A8_8					: std_logic;
+signal A8_8				: std_logic;
 signal F9_Q_n				: std_logic;
 signal H9_Q_n				: std_logic;
 signal H8_en				: std_logic;
