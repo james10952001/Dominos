@@ -43,25 +43,25 @@ signal H1				: std_logic;
 signal H2				: std_logic;
 signal H4				: std_logic;
 signal H256				: std_logic;
-signal H256_n			: std_logic;
+signal H256_n			        : std_logic;
 
 signal V1				: std_logic;
 signal V2				: std_logic;
 signal V4				: std_logic;
 
-signal char_addr		: std_logic_vector(8 downto 0) := (others => '0');
-signal char_data		: std_logic_vector(7 downto 0) := (others => '0');
+signal char_addr		        : std_logic_vector(8 downto 0) := (others => '0');
+signal char_data		        : std_logic_vector(7 downto 0) := (others => '0');
 
-signal shift_data		: std_logic_vector(7 downto 0) := (others => '0');
+signal shift_data		        : std_logic_vector(7 downto 0) := (others => '0');
 signal QH				: std_logic;
 
-signal R2_reg		: std_logic_vector(3 downto 0) := (others => '0');
+signal R2_reg		                : std_logic_vector(3 downto 0) := (others => '0');
 
 
 -- These signals are based off the schematic and are formatted as Designator_PinNumber
-signal R7_12			: std_logic;
+signal R7_12			        : std_logic;
 signal P3_3				: std_logic;
-signal P2_13			: std_logic;
+signal P2_13			        : std_logic;
 signal P3_6				: std_logic;
 signal A6_6				: std_logic;
 signal A6_3				: std_logic;
