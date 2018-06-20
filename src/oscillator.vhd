@@ -82,7 +82,8 @@ end process;
 
 -- There is a RC filter between the frequency control DAC and the 555 to smooth out the transitions between the
 -- 16 possible states. We can simulate a reasonable approximation of that behavior using a linear slope which is
--- not truly accurate but should be close enough. Sprint used 10uF, Dominos uses only 0.1uF so the change faster.
+-- not truly accurate but should be close enough. Sprint used 10uF, Dominos uses only 0.1uF so the time constant
+-- is much shorter.
 RC_filt: process(clk_6, ena_3k, ramp_term_unfilt)
 begin
 	if rising_edge(clk_6) then
