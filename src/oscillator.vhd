@@ -36,16 +36,16 @@ end Oscillator;
 
 architecture rtl of Oscillator is
 
-signal Freq_val 				: integer range 1 to 350;
+signal Freq_val 		: integer range 1 to 350;
 signal Ramp_term_unfilt		: integer range 1 to 80000;
-signal Ramp_Count 			: integer range 0 to 80000;
-signal Ramp_term				: integer range 1 to 80000;
-signal Freq_mod				: integer range 0 to 400;
-signal Osc_Clk					: std_logic;
+signal Ramp_Count 		: integer range 0 to 80000;
+signal Ramp_term		: integer range 1 to 80000;
+signal Freq_mod			: integer range 0 to 400;
+signal Osc_Clk			: std_logic;
 
-signal Counter_A				: std_logic;
-signal Counter_B 				: unsigned(2 downto 0);
-signal Counter_A_clk			: std_logic;
+signal Counter_A		: std_logic;
+signal Counter_B 		: unsigned(2 downto 0);
+signal Counter_A_clk		: std_logic;
 
 
 begin
@@ -67,7 +67,7 @@ begin
 			when "0101" => Freq_val <= 175;
 			when "0110" => Freq_val <= 160;
 			when "0111" => Freq_val <= 145;
-		   when "1000" => Freq_val <= 130;
+		        when "1000" => Freq_val <= 130;
 			when "1001" => Freq_val <= 115;
 			when "1010" => Freq_val <= 100;
 			when "1011" => Freq_val <= 85;
