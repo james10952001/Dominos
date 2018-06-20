@@ -27,9 +27,9 @@ generic(
 			constant Freq_tune : integer := 50 -- Value from 0-100 used to tune the oscillator frequency
 			);
 port(		
-			Clk_6			: in  std_logic; 
+			Clk_6		: in  std_logic; 
 			Ena_3k		: in  std_logic;
-			FreqData		: in	std_logic_vector(3 downto 0);
+			FreqData	: in	std_logic_vector(3 downto 0);
 			output		: out std_logic
 			);
 end Oscillator;
