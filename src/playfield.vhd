@@ -20,20 +20,20 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity playfield is 
 port(   
-			clk6			: in	std_logic;
-			display			: in	std_logic_vector(7 downto 0);
+			clk6			: in  std_logic;
+			display			: in  std_logic_vector(7 downto 0);
 			HCount			: in  std_logic_vector(8 downto 0);
 			VCount			: in  std_logic_vector(7 downto 0);
 			H256_s			: out std_logic;
-			HBlank			: in	std_logic;
-			VBlank			: in	std_logic;
+			HBlank			: in  std_logic;
+			VBlank			: in  std_logic;
 			VBlank_n_s		: in  std_logic; -- VBLANK* on the schematic	
-			HSync			: in	std_logic;
-			VSync			: in	std_logic;
+			HSync			: in  std_logic;
+			VSync			: in  std_logic;
 			CompSync_n_s	        : out std_logic; -- COMP SYNC* on schematic
 			CompBlank_s		: out std_logic; -- COMP BLANK* on schematic
-			WhitePF_n		: out	std_logic; 
-			BlackPF_n		: out	std_logic 
+			WhitePF_n		: out std_logic; -- White playfield objects
+			BlackPF_n		: out std_logic  -- Black playfield objects
 			);
 end playfield;
 
